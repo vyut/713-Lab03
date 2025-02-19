@@ -46,9 +46,9 @@ app.post("/upload", upload.single("file"), async (req: any, res: any) => {
     const bucket = "bucket-se713";
     const filePath = `uploads/${file.originalname}`;
     
-    await uploadFile(bucket, filePath, file);
+    const outputUrl = await uploadFile(bucket, filePath, file);
 
-    res.status(200).send("File uploaded successfully.");
+    res.status(200).send(outputUrl);
   } catch (error) {
     res.status(500).send("Error uploading file.");
   }
