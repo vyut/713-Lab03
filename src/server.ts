@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { getAllBooks, getBooksByGroup, getBookById, addBook } from "./services/BookService";
-import type { Book } from "./services/BookService";
+
+import type { Book } from "./models/Book";
 import add from "./function";
 const app = express();
 app.use(express.json());
