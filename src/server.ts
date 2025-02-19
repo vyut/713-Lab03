@@ -11,19 +11,19 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
-app.get("/events", (req, res) => {
+app.get("/events", async (req, res) => {
     if (req.query.category) {
       const category = req.query.category as string;
-      const filteredEvents = getEventByCategory(category as string);
+      const filteredEvents = await getEventByCategory(category as string);
       res.json(filteredEvents);
     } else {
-      res.json(getAllEvents());
+      res.json(await getAllEvents());
     }
 });
 
-app.get("/events/:id", (req, res) => {
+app.get("/events/:id", async (req, res) => {
     const id = parseInt(req.params.id);
-    const event = getEventById(id);
+    const event = await getEventById(id);
     if (event) {
       res.json(event);
     } else {
@@ -31,9 +31,9 @@ app.get("/events/:id", (req, res) => {
     }
 });  
 
-app.post("/events", (req, res) => {    
+app.post("/events", async (req, res) => {    
   const newEvent: Event = req.body;
-  addEvent(newEvent);
+  await addEvent(newEvent);
   res.json(newEvent);
 });
 
