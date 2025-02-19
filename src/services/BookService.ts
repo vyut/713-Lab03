@@ -51,21 +51,21 @@ const books: Book[] = [
     }
 ];
 
-export function getBooksByGroup(group: string): Book[] {
+export function getBooksByGroup(group: string): Promise<Book[]> {
     const filteredBooks = books.filter((book) => book.group === group);
-    return filteredBooks;
+    return Promise.resolve(filteredBooks);
 }
 
-export function getAllBooks(): Book[] {
-    return books;
+export function getAllBooks(): Promise<Book[]> {
+    return Promise.resolve(books);
 }
 
-export function getBookById(id: number): Book | undefined {
-    return books.find((book) => book.id === id);
+export function getBookById(id: number): Promise<Book | undefined> {
+    return Promise.resolve(books.find((book) => book.id === id));
 }
 
-export function addBook(newBook: Book): Book {
+export function addBook(newBook: Book): Promise<Book> {
     newBook.id = books.length + 1;
     books.push(newBook);
-    return newBook;
+    return Promise.resolve(newBook);
 }
