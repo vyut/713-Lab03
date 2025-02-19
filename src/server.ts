@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import add from "./function";
 const app = express();
 app.use(express.json());
 const port = 3000;
@@ -84,45 +85,54 @@ const events: Event[] = [
     organizer: "Foodie Events"
   }
 ];
+
+function getEventByCategory(category: string): Event[] {
+  const filteredEvents = events.filter((event) => event.category === category);
+  return filteredEvents;
+}
+
+function getAllEvents(): Event[] {
+  return events;
+}
+
+function getEventById(id: number): Event | undefined {
+  return events.find((event) => event.id === id);
+}
+
+function addEvent(newEvent: Event): Event {
+  newEvent.id = events.length + 1;
+  events.push(newEvent);
+  return newEvent;
+}
+
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
-app.get("/test", (req, res) => {
-  const id = req.query.id;
-
-  const output = `id: ${id}`;
-  res.send(output);
-});
-
-
 app.get("/events", (req, res) => {
     if (req.query.category) {
-    const category = req.query.category;
-    const filteredEvents = events.filter((event) => event.category === category);
-    res.json(filteredEvents);
+      const category = req.query.category as string;
+      const filteredEvents = getEventByCategory(category as string);
+      res.json(filteredEvents);
     } else {
-    res.json(events);
+      res.json(getAllEvents());
     }
 });
 
-
 app.get("/events/:id", (req, res) => {
     const id = parseInt(req.params.id);
-    const event = events.find((event) => event.id === id);
+    const event = getEventById(id);
     if (event) {
-    res.json(event);
+      res.json(event);
     } else {
-    res.status(404).send("Event not found");
+      res.status(404).send("Event not found");
     }
 });  
 
 app.post("/events", (req, res) => {    
-    console.log(req.body);
-    const newEvent: Event = req.body;    
-    newEvent.id = events.length + 1;
-    events.push(newEvent);
-    res.json(newEvent);
+  const newEvent: Event = req.body;
+  addEvent(newEvent);
+  res.json(newEvent);
 });
 
 
