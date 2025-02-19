@@ -3,138 +3,107 @@ import add from "./function";
 const app = express();
 app.use(express.json());
 const port = 3000;
-
-interface Event {
-  id: number;
-  category: string;
-  title: string;
-  description: string;
-  location: string;
-  date: string;
-  time: string;
-  petsAllowed: boolean;
-  organizer: string;
+interface Book {
+    id: number;
+    title: string;
+    author: string;
+    description: string;
+    group: string;
 }
 
-const events: Event[] = [
-  {
-    id: 1,
-    category: "Music",
-    title: "Concert",
-    description: "A live concert",
-    location: "London",
-    date: "2021-07-01",
-    time: "19:00",
-    petsAllowed: false,
-    organizer: "Live Nation"
-  },
-  {
-    id: 2,
-    category: "Music",
-    title: "Festival",
-    description: "A music festival",
-    location: "Manchester",
-    date: "2021-07-15",
-    time: "12:00",
-    petsAllowed: true,
-    organizer: "Festival Republic"
-  },
-  {
-    id: 3,
-    category: "Sports",
-    title: "Football Match",
-    description: "A football match",
-    location: "Liverpool",
-    date: "2021-08-01",
-    time: "15:00",
-    petsAllowed: false,
-    organizer: "Premier League"
-  },
-  // ...existing code...
-  {
-    id: 4,
-    category: "Music",
-    title: "Jazz Night",
-    description: "An evening of smooth jazz",
-    location: "New Orleans",
-    date: "2021-09-10",
-    time: "19:00",
-    petsAllowed: true,
-    organizer: "Jazz Fest"
-  },
-  {
-    id: 5,
-    category: "Theatre",
-    title: "Shakespeare in the Park",
-    description: "A performance of Hamlet",
-    location: "Central Park",
-    date: "2021-10-05",
-    time: "18:00",
-    petsAllowed: false,
-    organizer: "NYC Theatre Group"
-  },
-  {
-    id: 6,
-    category: "Food",
-    title: "Food Truck Festival",
-    description: "A variety of food trucks offering delicious meals",
-    location: "San Francisco",
-    date: "2021-11-20",
-    time: "12:00",
-    petsAllowed: true,
-    organizer: "Foodie Events"
-  }
+const books: Book[] = [
+    {
+        id: 1,
+        title: "The Great Gatsby",
+        author: "F. Scott Fitzgerald",
+        description: "The story of the mysteriously wealthy Jay Gatsby and his love for the beautiful Daisy Buchanan.",
+        group: "Fiction"
+    },
+    {
+        id: 2,
+        title: "To Kill a Mockingbird",
+        author: "Harper Lee",
+        description: "The story of a young daughter of a lawyer who witnesses a drama in her small town.",
+        group: "Classic"
+    },
+    {
+        id: 3,
+        title: "1984",
+        author: "George Orwell",
+        description: "A dystopian novel about a totalitarian regime and an ordinary day-to-day worker.",
+        group: "Dystopian"
+    },
+    {
+        id: 4,
+        title: "Pride and Prejudice",
+        author: "Jane Austen",
+        description: "The story of the Bennet family and their five unmarried daughters.",
+        group: "Romance"
+    },
+    {
+        id: 5,
+        title: "The Catcher in the Rye",
+        author: "J.D. Salinger",
+        description: "The story of a teenager Holden Caulfield and his experiences in New York City.",
+        group: "Coming-of-Age"
+    },
+    {
+        id: 6,
+        title: "The Hobbit",
+        author: "J.R.R. Tolkien",
+        description: "The adventure of Bilbo Baggins as he sets out on a quest to win a share of the treasure guarded by Smaug the dragon.",
+        group: "Fantasy"
+    }
 ];
 
-function getEventByCategory(category: string): Event[] {
-  const filteredEvents = events.filter((event) => event.category === category);
-  return filteredEvents;
+function getBooksByGroup(group: string): Book[] {
+  const filteredBooks = books.filter((book) => book.group === group);
+  return filteredBooks;
 }
 
-function getAllEvents(): Event[] {
-  return events;
+function getAllBooks(): Book[] {
+  return books;
 }
 
-function getEventById(id: number): Event | undefined {
-  return events.find((event) => event.id === id);
+function getBookById(id: number): Book | undefined {
+  return books.find((book) => book.id === id);
 }
 
-function addEvent(newEvent: Event): Event {
-  newEvent.id = events.length + 1;
-  events.push(newEvent);
-  return newEvent;
+function addBook(newBook: Book): Book {
+  newBook.id = books.length + 1;
+  books.push(newBook);
+  return newBook;
 }
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
-app.get("/events", (req, res) => {
-    if (req.query.category) {
-      const category = req.query.category as string;
-      const filteredEvents = getEventByCategory(category as string);
-      res.json(filteredEvents);
-    } else {
-      res.json(getAllEvents());
-    }
+app.get("/books", (req, res) => {
+  if (req.query.group) {
+    const group = req.query.group as string;
+    const filteredBooks = getBooksByGroup(group as string);
+    res.json(filteredBooks);
+  } else {
+    res.json(getAllBooks());
+  }
 });
 
-app.get("/events/:id", (req, res) => {
-    const id = parseInt(req.params.id);
-    const event = getEventById(id);
-    if (event) {
-      res.json(event);
-    } else {
-      res.status(404).send("Event not found");
-    }
-});  
-
-app.post("/events", (req, res) => {    
-  const newEvent: Event = req.body;
-  addEvent(newEvent);
-  res.json(newEvent);
+app.get("/books/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const book = getBookById(id);
+  if (book) {
+    res.json(book);
+  } else {
+    res.status(404).send("Book not found");
+  }
 });
 
+app.post("/books", (req, res) => {
+  const newBook: Book = req.body;
+  addBook(newBook);
+  res.json(newBook);
+})
 
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
