@@ -1,0 +1,23 @@
+{
+  "name": "713-lab",
+  "version": "1.0.0",
+  "description": "## 1. Initialize the Project ```sh mkdir my-node-ts-app && cd my-node-ts-app npm init -y ``` This will create a `package.json` file.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "dev": "ts-node src/server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
