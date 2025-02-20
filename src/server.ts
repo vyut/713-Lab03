@@ -1,10 +1,8 @@
 import express, { Request, Response } from "express";
-import { getAllBooks, getBooksByGroup, getBookById, addBook } from "./services/BookService";
-
-import type { Book } from "./models/Book";
 import multer from "multer";
 import dotenv from "dotenv";
 dotenv.config();
+import bookRoute from "./routes/BookRoute";
 import { uploadFile } from "./services/UploadFileService";
 
 const upload = multer({ storage: multer.memoryStorage() });
@@ -12,31 +10,8 @@ const upload = multer({ storage: multer.memoryStorage() });
 import add from "./function";
 const app = express();
 app.use(express.json());
+app.use('/books', bookRoute);
 const port = 3000;
-
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
-});
-
-app.get("/books", async (req, res) => {
-  if (req.query.group) {
-    const group = req.query.group as string;
-    const filteredBooks = await getBooksByGroup(group as string);
-    res.json(filteredBooks);
-  } else {
-    res.json(await getAllBooks());
-  }
-});
-
-app.get("/books/:id", async (req, res) => {
-  const id = parseInt(req.params.id);
-  const book = await getBookById(id);
-  if (book) {
-    res.json(book);
-  } else {
-    res.status(404).send("Book not found");
-  }
-});
 
 app.post("/upload", upload.single("file"), async (req: any, res: any) => {
   try {
