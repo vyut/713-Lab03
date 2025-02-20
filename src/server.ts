@@ -3,6 +3,8 @@ import { getAllBooks, getBooksByGroup, getBookById, addBook } from "./services/B
 
 import type { Book } from "./models/Book";
 import multer from "multer";
+import dotenv from "dotenv";
+dotenv.config();
 import { uploadFile } from "./services/UploadFileService";
 
 const upload = multer({ storage: multer.memoryStorage() });
@@ -43,8 +45,8 @@ app.post("/upload", upload.single("file"), async (req: any, res: any) => {
       return res.status(400).send("No file uploaded.");
     }
 
-    const bucket = "bucket-se713";
-    const filePath = `uploads`;
+    const bucket = process.env.SUPABASE_BUCKET_NAME as string;
+    const filePath = process.env.UPLOAD_DIR as string;
     
     const outputUrl = await uploadFile(bucket, filePath, file);
 
